@@ -1,6 +1,7 @@
 from flask import Flask, jsonify,request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
+import statement6dbope as std6
 from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity, get_jwt_claims
@@ -71,6 +72,14 @@ def protected():
         'roles': get_jwt_claims()['roles'] ,
         }
     return jsonify(ret), 200
+
+
+@app.route('/academicyear')
+def getacademicyear():
+    #return {"message":"Check you luck"}
+    year=std6.get_academic_year()
+    #return jsonify({"check": 1}), 200
+    return jsonify({"year":year})
 
 
 if __name__ == "__main__":
