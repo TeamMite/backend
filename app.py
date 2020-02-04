@@ -81,6 +81,13 @@ def getacademicyear():
     #return jsonify({"check": 1}), 200
     return jsonify({"year":year})
 
+@app.route('/term')
+def term():
+    #mogodb query
+    
+    termType=std6.get_term()
+    return jsonify({'term':termType})
+
 
 if __name__ == "__main__":
     app.run(port=8088,debug=True)
