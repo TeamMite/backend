@@ -87,6 +87,20 @@ def term():
     
     termType=std6.get_term()
     return jsonify({'term':termType})
+@app.route('/get-usn/<email>')
+def getusn(email):
+    usn=std6.get_student_usn(email)
+    return jsonify({"usn":usn})
+
+@app.route('/placement/<usn>/<term>')
+def getOffers(usn,term):
+    offers = std6.get_student_placement_offers(usn,term)
+    return jsonify({"offers":offers})
+
+@app.route('/<usn>/score')
+def getScores(usn):
+    scores = std6.get_student_score(usn)
+    return jsonify({"scores":scores})
 
 
 if __name__ == "__main__":
