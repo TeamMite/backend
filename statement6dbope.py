@@ -50,7 +50,7 @@ def get_student_score(usn):
     scoredetails=score.aggregate([
         {"$match":{"usn":usn,"education":{"$exists":"true"}}},
         {"$unwind":"$education"},
-        {"$project":{"qualification":"$education.qualification","result":"$education.percentageOrCGPA","_id":0}},
+        {"$project":{"qualification":"$education.qualification","result":"$education.overallPercentage","_id":0}},
         {"$match":{"$or":[{"qualification":"X"},{"qualification":"XII"},{"qualification":"SSLC"},{"qualification":"PUC"}]}}
     ])
     res = []
