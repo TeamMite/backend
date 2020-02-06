@@ -102,6 +102,23 @@ def getScores(usn):
     scores = std6.get_student_score(usn)
     return jsonify({"scores":scores})
 
+@app.route('/dept')
+def getallDepts():
+    depts=std6.get_all_depts()
+    return jsonify({"depts":depts})
+
+@app.route('/<dept>/dept')
+def getFacultiesByDept(dept):
+    facs=std6.get_faculties_by_dept(dept)
+    return jsonify({"facs":facs})
+@app.route('/<email>/empid')
+def getEmpId(email):
+    empid=std6.get_emp_id(email)
+    return jsonify({"empid":empid})
+# @app.route('/<email>/role')
+# def getrole(email):
+#     roles=std6.get_user_roles_by_email(email)
+#     return jsonify({"roles":roles})
 
 if __name__ == "__main__":
     app.run(port=8088,debug=True)
