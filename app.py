@@ -115,6 +115,13 @@ def getFacultiesByDept(dept):
 def getEmpId(email):
     empid=std6.get_emp_id(email)
     return jsonify({"empid":empid})
+
+@app.route('/emp/subs/<empid>/<term>/<sem>')
+def get_emp_subs(empid,term,sem):
+    empSubs = std6.get_emp_subjects(empid,term,sem)
+    return jsonify({'subs':empSubs})
+
+
 # @app.route('/<email>/role')
 # def getrole(email):
 #     roles=std6.get_user_roles_by_email(email)
