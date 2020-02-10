@@ -121,6 +121,19 @@ def get_emp_subs(empid,term,sem):
     empSubs = std6.get_emp_subjects(empid,term,sem)
     return jsonify({'subs':empSubs})
 
+@app.route('/emp/sub/<empid>/<term>/<sem>/<sub>')
+def get_emp_sub_details(empid,term,sem,sub):
+    empSubs = std6.get_emp_sub_details(empid,term,sem,sub)
+    return jsonify({'sub':empSubs})
+
+@app.route('/emp/placement/<empid>/<sem>/<sub>')
+def get_emp_placement(empid,sem,sub):
+    empSub = std6.get_emp_sub_placement(empid,sub,sem)
+    return jsonify({
+        'numofStudent':empSub[0],
+        'placed':empSub[1],
+        'positions':empSub[2]
+    })
 
 # @app.route('/<email>/role')
 # def getrole(email):

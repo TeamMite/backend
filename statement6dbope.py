@@ -133,7 +133,7 @@ def get_emp_sub_education(empID,year,sub,sem):
     xiiMarks = 0
     for edu in education:
         e = edu['education']
-        if "qualification" in e.keys() and ("overallPercentage" in e.keys() or "percentageOrCGPA" in e.keys()):
+        if "qualification" in e.keys() and ("overallPercentage" in e.keys()):
             if e["qualification"] == "X" or e["qualification"] == "SSLC":
                 if True or e["board"] != "CBSE":
                     marks = e["overallPercentage"]
@@ -165,6 +165,29 @@ def get_emp_subjects(empid,term,sem):
     collection = db.dhi_internal
     marks = collection.aggregate([
     {"$match":{"faculties.facultyGivenId":empid,"academicYear":term,"departments.termName":sem}},
+    {"$unwind":"$departments"},
+    {"$unwind":"$studentScores"},
+    {"$match":{"studentScores.totalScore":{"$gt":0}}},
+    {"$group":{"_id":"$courseCode","courseCode":{"$first":"$courseCode"},"courseName":{"$first":"$courseName"}}},
+    {"$project":{"_id":0}}
+    ])
+    res = []
+    for mark in marks:
+        place = get_emp_sub_placement(empid,mark['courseName'],sem)
+        education = get_emp_sub_education(empid,term,mark['courseName'],sem)
+        mark['xPercentage'] = education[0]
+        mark['xiiPercentage'] = education[1]
+        if place[0] != 0:
+            mark['placePercentage'] = 100 * place[1] / place[0]
+        else:
+            mark['placePercentage'] = 0
+        res.append(mark)
+    return res
+
+def get_emp_sub_details(empid,term,sem,subject):
+    collection = db.dhi_internal
+    marks = collection.aggregate([
+    {"$match":{"faculties.facultyGivenId":empid,"academicYear":term,"departments.termName":sem,"courseName":subject}},
     {"$unwind":"$departments"},
     {"$unwind":"$studentScores"},
     {"$match":{"studentScores.totalScore":{"$gt":0}}},
